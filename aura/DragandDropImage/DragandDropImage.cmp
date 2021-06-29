@@ -1,0 +1,55 @@
+<aura:component controller="DragandDropImageController" implements="force:appHostable,flexipage:availableForAllPageTypes,flexipage:availableForRecordHome,force:hasRecordId,forceCommunity:availableForAllPageTypes,force:lightningQuickAction" access="global" >
+    <aura:handler name="init" value="{!this}" action="{!c.doInit}"/> 
+    <aura:attribute name="parentId" type="String" />
+    <aura:attribute name="parent" type="Aura.Component" />
+    <aura:attribute name="showLoadingSpinner" type="boolean" default="false" />
+    <aura:attribute name="fileName" type="String" default="No File Selected"/>
+    <aura:attribute name="fullphotourl" type="String"/>
+    <aura:attribute name="EditPhoto" type="Boolean" default="false"/>
+    <aura:attribute name="currentphotobool" type="Boolean" default="false"/>
+    <aura:attribute name="pictureSrc" type="String"/>
+    <aura:attribute name="istruthy" type="boolean" default="true"/>
+    <aura:attribute name="Question" type="Progress_Bar_Question__c[]"/> 
+    <aura:if isTrue="{!v.istruthy}">
+        <section role="dialog" tabindex="-1" aria-labelledby="modal-heading-01" aria-modal="true" aria-describedby="modal-content-id-1" class="slds-modal slds-fade-in-open">
+            <div class="slds-modal__container">
+                <header class="slds-modal__header">
+                    <button class="slds-button slds-button_icon slds-modal__close slds-button_icon-inverse" onclick="{!c.doClose}" title="Close">
+                        <lightning:icon iconName="utility:close"  alternativeText="Close" variant="inverse" size="x-small"/>
+                        <span class="slds-assistive-text">Close</span>
+                    </button>
+                    <h2 id="modal-heading-01" class="slds-modal__title slds-hyphenate">
+                        <aura:iteration items="{!v.Question}" var="que">
+                            {!que.Question__c}
+                        </aura:iteration>
+                    </h2>
+                </header>
+                <div class="slds-modal__content slds-p-around_medium" id="modal-content-id-1">
+                    <lightning:input aura:id="fileId" onchange="{!c.handleFilesChange}" type="file" name="file" label="You can upload a JPG, GIF or PNG file. Maximum file size is 16 MB." multiple="false"/>
+                    <div class="slds-text-body_small" style="color:grey">{!v.fileName} </div>
+                    <aura:if isTrue="{!v.EditPhoto}">
+                        <div>
+                            <aura:if isTrue="{!v.currentphotobool}">
+                                Current Photo: 
+                                <br/>
+                            </aura:if>
+                            <img src="{!v.pictureSrc}" />
+                        </div>
+                        <aura:set attribute="else">
+                            <div> 
+                                Current Photo: 
+                                <br/>
+                                <img src="{!v.fullphotourl}" />
+                            </div>
+                        </aura:set>
+                    </aura:if> 
+                </div>
+                <footer class="slds-modal__footer">
+                    <button class="slds-button slds-button_neutral" onclick="{!c.doClose}">Cancel</button>
+                    <button class="slds-button slds-button_brand" onclick="{!c.doSave}">Save</button>
+                </footer>
+            </div>
+        </section>
+        <div class="slds-backdrop slds-backdrop_open"></div>
+    </aura:if>
+</aura:component>
